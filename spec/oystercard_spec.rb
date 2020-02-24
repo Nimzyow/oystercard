@@ -10,11 +10,19 @@ describe Oystercard do
     it "#top_up" do
       expect(subject).to respond_to(:top_up).with(1).arguments
     end
+    it "#deduct" do
+      expect(subject).to respond_to(:deduct).with(1).arguments
+    end
   end
   context "method functionality" do
     it "tops up the balance by given amount" do
       subject.top_up(3)
       expect(subject.balance).to eq(3)
+    end
+    it "deducts given amount from balance" do
+      subject.top_up(50)
+      subject.deduct(30)
+      expect(subject.balance).to eq(20)
     end
     it "raises error if #top_up exceeds max balance" do
       subject.top_up(50)

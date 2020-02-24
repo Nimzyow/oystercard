@@ -12,6 +12,10 @@ class Oystercard
     success_message
   end
 
+  def deduct(money)
+    @balance -= money
+  end
+
   private
   def success_message
     "Succesfully topped up. current balance is #{@balance}"
