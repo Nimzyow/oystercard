@@ -1,4 +1,5 @@
 class Oystercard
+  MAX_BALANCE = 90
   attr_accessor :balance
 
   def initialize
@@ -8,10 +9,14 @@ class Oystercard
   def top_up(money)
     check_max_balance(money)
     @balance += money
+    success_message
   end
 
   private
+  def success_message
+    "Succesfully topped up. current balance is #{@balance}"
+  end
   def check_max_balance(money)
-    raise "top_up exceeds maximum balance" if @balance + money > 90
+    raise "top_up exceeds maximum balance" if @balance + money > MAX_BALANCE
   end
 end
