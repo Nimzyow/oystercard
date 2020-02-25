@@ -37,36 +37,46 @@ describe Oystercard do
       subject.top_up(3)
       expect(subject.balance).to eq(3)
     end
+
     it "#touch_out deducts given amount from balance" do
       subject.top_up(10)
       subject.touch_out
       expect{subject.touch_out}.to change{subject.balance}.by(-Oystercard::MINIMUM_CHARGE)
     end
+
     it "raises error if #top_up exceeds max balance" do
       subject.top_up(50)
       expect{subject.top_up(50)}.to raise_error("top_up exceeds £90")
     end
+
     it "#top_up gives user message of successful top up" do
       expect(subject.top_up(50)).to eq("Succesfully topped up. current balance is #{subject.balance}")
     end
 
-    it "#touch_in switches in_journey to true" do
-      top_up_and_enter
-      expect(subject.in_journey).to be true 
+      context "#touch_in" do
+        it "switches in_journey to true" do
+          top_up_and_enter
+          expect(subject.in_journey).to be true 
+        end
+
+        it "raises error when balance is < 1" do
+          expect{subject.touch_in}.to raise_error("no money, bruh")
+        end
+      end
+    
+      context "#touch_out" do
+        it "switches in_journey to false" do
+          top_up_and_enter
+          subject.touch_out
+          expect(subject.in_journey).to be false
+        end
+    
+        it "deducts minimum charge of -5" do
+          top_up_and_enter
+          subject.touch_out
+          expect{subject.touch_out}.to change{subject.balance}.by(-Oystercard::MINIMUM_CHARGE)
+        end
+      end
     end
-    it "#touch_in raises error when balance is < 1" do
-      expect{subject.touch_in}.to raise_error("no money, bruh")
-    end
-    it "#touch_out switched in_journey to false" do
-      top_up_and_enter
-      subject.touch_out
-      expect(subject.in_journey).to be false
-    end
-    it "#touch_out deducts minimum charge of -5" do
-      top_up_and_enter
-      subject.touch_out
-      expect{subject.touch_out}.to change{subject.balance}.by(-Oystercard::MINIMUM_CHARGE)
-    end
-  end
   
 end
