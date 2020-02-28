@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Journeylog
-  attr_reader :entry_station, :exit_station, :journey
+  attr_reader :entry_station, :exit_station, :journey, :entry_zone, :exit_zone
   def initialize
     @entry_station = nil
     @entry_zone = nil
@@ -23,19 +23,22 @@ class Journeylog
 
   def add_journey
     journey.push({entry_station: entry_station, exit_station: exit_station})
-    reset_station_details
   end
 
   def in_journey?
     entry_station ? 'You are on a GREAT journey' : 'You are not on a journey'
   end
 
+  def call_reset
+    reset_journey
+  end
+
   private
-  
-  def reset_station_details
+  def reset_journey
     @entry_station = nil
-    @exit_station = nil
     @entry_zone = nil
+    @exit_station = nil
     @exit_zone = nil
   end
+
 end

@@ -3,13 +3,17 @@
 class Oystercard
   MAX_BALANCE = 90
   MIN_BALANCE = 1
-  MINIMUM_CHARGE = 1
   attr_reader :balance, :journey, :journey_log
 
-  def initialize(journey_log = Journeylog.new)
+  def initialize(journey_log = Journeylog.new, journey_calc = Journeycalculator.new)
     @balance = 0
     @journey = []
     @journey_log = journey_log
+    @journey_calc = journey_calc
+  end
+
+  def in_journey
+    @journey_log.in_journey?
   end
 
   def top_up(money)
@@ -19,26 +23,31 @@ class Oystercard
   end
 
   def touch_in(station)
+    deduct(@journey_calc.calc_fare) if @journey_log.entry_station
     raise 'no money, bruh' if balance < MIN_BALANCE
-    @journey_log.start_tracking(station)
+    start_journey(station)
   end
 
   def touch_out(station)
-    deduct(MINIMUM_CHARGE)
-    @exit_station = station
     @journey_log.end_tracking(station)
-    @entry_station = nil
-    @exit_station = nil
-  end
-
-  def in_journey
-    @journey_log.in_journey?
+    @journey_calc.set_exit_zone(@journey_log.exit_zone)
+    deduct(@journey_calc.calc_fare)
   end
 
   private
 
+  def start_journey(station)
+    @journey_log.start_tracking(station)
+    @journey_calc.set_entry_zone(@journey_log.entry_zone)
+  end
+
   def deduct(money)
     @balance -= money
+    reset_journey
+  end
+
+  def reset_journey
+    @journey_log.call_reset
   end
 
   def success_message

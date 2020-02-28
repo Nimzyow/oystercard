@@ -2,13 +2,13 @@
 
 require 'journey_log'
 
-shared_context 'common' do
+shared_context 'common journey_log' do
   let(:station1) { double('entry_station', name: 'Oxford st', zone: 1) }
   let(:station2) { double('exit_station', name: 'Liverpool St', zone: 3) }
 end
 
 describe Journeylog do
-  include_context 'common'
+  include_context 'common journey_log'
 
   context 'has attributes' do
     it 'entry_station' do
@@ -35,6 +35,9 @@ describe Journeylog do
     it '#in_journey?' do
       expect(subject).to respond_to(:in_journey?)
     end
+    it "#call_reset" do
+      expect(subject).to respond_to(:call_reset)
+    end
   end
 
   context 'method functionality' do
@@ -56,6 +59,16 @@ describe Journeylog do
       subject.start_tracking(station1)
       subject.end_tracking(station2)
       expect(subject.journey).to include({entry_station: 'Oxford st', exit_station: 'Liverpool St'})
+    end
+
+    it "#call_reset resets stations and zones to nil" do
+      subject.start_tracking(station1)
+      subject.end_tracking(station2)
+      subject.call_reset
+      expect(subject.entry_station).to be_nil
+      expect(subject.exit_station).to be_nil
+      expect(subject.entry_zone).to be_nil
+      expect(subject.exit_zone).to be_nil
     end
   end
 end
