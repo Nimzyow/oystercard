@@ -21,10 +21,6 @@ describe Oystercard do
       expect(subject).to have_attributes(balance: 0)
     end
 
-    it 'journey' do
-      expect(subject).to have_attributes(journey: [])
-    end
-
     it 'Journeylog' do
       expect(subject).to respond_to(:journey_log)
     end

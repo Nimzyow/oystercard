@@ -7,7 +7,6 @@ class Oystercard
 
   def initialize(journey_log = Journeylog.new, journey_calc = Journeycalculator.new)
     @balance = 0
-    @journey = []
     @journey_log = journey_log
     @journey_calc = journey_calc
   end
