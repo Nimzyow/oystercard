@@ -6,7 +6,9 @@ shared_context 'common' do
   let(:station) { double('station', name: 'bank', zone: 1) }
   let(:station2) { double('station2', name: 'oxford street', zone: 3) }
   let(:journey_log) {double("journey_log", entry_station: nil, entry_zone: nil, exit_station: nil, exit_zone: nil, journey: [], start_tracking: nil, end_tracking: nil, call_reset: nil, in_journey?: nil)}
+
   let(:journey_calc) {double("journey_calc", calc_fare: 1, set_entry_zone: nil, set_exit_zone: nil)}
+  
   subject {described_class.new(journey_log, journey_calc)}
   let(:top_up_and_enter) { 
     subject.top_up(10)
