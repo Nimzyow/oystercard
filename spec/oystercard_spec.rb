@@ -34,14 +34,6 @@ describe Oystercard do
     end
   end
 
-  context 'station change' do
-    # it "exit_station stores exit station" do
-    #   top_up_and_enter
-    #   subject.touch_out("Liverpool Street")
-    #   expect(subject.exit_station).to eq("Liverpool Street")
-    # end
-  end
-
   context 'journey tests' do
     it '#in_journey to return "You are not on a journey"' do
       allow(journey_calc).to receive(:calc_fare).and_return(9)
@@ -108,8 +100,6 @@ describe Oystercard do
       end
 
       it "charge penalty if tap in twice" do
-        
-        
         subject.top_up(30)
         subject.touch_in(station)
         allow(subject.journey_log).to receive(:entry_station).and_return("bank")
